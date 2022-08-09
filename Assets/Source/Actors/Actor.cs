@@ -49,8 +49,9 @@ namespace DungeonCrawl.Actors
             }
             else
             {
-                if (actorAtTargetPosition.OnCollision(this))
+                if (OnCollision(actorAtTargetPosition, targetPosition))
                 {
+                    Debug.Log("bye");
                     // Allowed to move
                     Position = targetPosition;
                 }
@@ -63,13 +64,9 @@ namespace DungeonCrawl.Actors
         /// </summary>
         /// <param name="anotherActor"></param>
         /// <returns>true if actor can walk on this position, false if not</returns>
-        public virtual bool OnCollision(Actor anotherActor)
+        public virtual bool OnCollision(Actor actorAtPosition, (int, int) targetPosition)
         {
             // All actors are passable by default
-            if (ActorManager.Singleton.GetSprite(825).rect.x != anotherActor._position.x)
-            {
-                return false;
-            }
             return true;
         }
 

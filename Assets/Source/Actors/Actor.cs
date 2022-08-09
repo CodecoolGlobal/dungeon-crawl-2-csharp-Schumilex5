@@ -66,6 +66,10 @@ namespace DungeonCrawl.Actors
         public virtual bool OnCollision(Actor anotherActor)
         {
             // All actors are passable by default
+            if (ActorManager.Singleton.GetSprite(825).rect.x != anotherActor._position.x)
+            {
+                return false;
+            }
             return true;
         }
 

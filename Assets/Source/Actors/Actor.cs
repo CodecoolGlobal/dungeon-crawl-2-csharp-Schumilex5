@@ -1,4 +1,5 @@
-﻿using DungeonCrawl.Core;
+﻿using DungeonCrawl.Actors.Items;
+using DungeonCrawl.Core;
 using UnityEngine;
 
 namespace DungeonCrawl.Actors
@@ -42,7 +43,7 @@ namespace DungeonCrawl.Actors
 
             var actorAtTargetPosition = ActorManager.Singleton.GetActorAt(targetPosition);
 
-            if (actorAtTargetPosition == null)
+            if (actorAtTargetPosition == null || ActorManager.Singleton.GetActorAt<Item>(targetPosition))
             {
                 // No obstacle found, just move
                 Position = targetPosition;

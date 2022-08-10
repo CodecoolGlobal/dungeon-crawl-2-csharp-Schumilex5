@@ -54,7 +54,8 @@
      <Compile Include="Assets\Source\ExtensionMethods\Attack.cs" />
      <Compile Include="Assets\Source\Core\GameManager.cs" />
      <Compile Include="Assets\Source\Core\ActorManager.cs" />
-     <Compile Include="Assets\Source\Actors\Static\Sword.cs" />
+     <Compile Include="Assets\Source\Actors\Items\Sword.cs" />
+     <Compile Include="Assets\Source\Actors\Items\Item.cs" />
      <None Include="Assets\TextMesh Pro\Shaders\TMPro.cginc" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_SDF-Mobile Overlay.shader" />
      <None Include="Assets\TextMesh Pro\Shaders\TMP_Bitmap.shader" />

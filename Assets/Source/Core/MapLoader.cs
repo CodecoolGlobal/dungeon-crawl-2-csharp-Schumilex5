@@ -2,6 +2,7 @@
 using DungeonCrawl.Actors.Static;
 using System;
 using System.Text.RegularExpressions;
+using DungeonCrawl.Actors.Items;
 using UnityEngine;
 
 namespace DungeonCrawl.Core

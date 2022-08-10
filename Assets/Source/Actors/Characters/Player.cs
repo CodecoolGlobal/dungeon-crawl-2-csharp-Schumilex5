@@ -1,5 +1,7 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 using Assets.Source.Actors.ExtensionMethods;
+using DungeonCrawl.Actors.Items;
 using DungeonCrawl.Core;
 
 
@@ -11,6 +13,7 @@ namespace DungeonCrawl.Actors.Characters
         public float timeBtwAttack { get; set; }
         public static readonly float startTimeBtwAttack = 1f;
         public static readonly int damage = 5;
+        private List<Item> _inventory = new List<Item>();
 
         protected override void OnUpdate(float deltaTime)
         {
@@ -39,6 +42,16 @@ namespace DungeonCrawl.Actors.Characters
                 // Move right
                 TryMove(Direction.Right);
             }
+
+            if (Input.GetKeyDown(KeyCode.E))
+            {
+                var item = ActorManager.Singleton.GetActorAt<Item>(Position);
+                if (item != null)
+                {
+                    ItemPickUp(item);
+                    Debug.Log($"Anyás {_inventory[0].DefaultName}");
+                }
+            }
             CameraController.Singleton.Position = (Position.x,Position.y) ;
         }
 
@@ -56,11 +69,17 @@ namespace DungeonCrawl.Actors.Characters
             return true;
         }
 
-        
-
         protected override void OnDeath()
         {
             Debug.Log("Oh no, I'm dead!");
+        }
+
+        public void ItemPickUp(Item item)
+        {
+            if (Position == item.Position)
+            {
+                _inventory.Add(item);
+            }
         }
 
         public override int DefaultSpriteId => 24;

@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Assets.Source.Actors.ExtensionMethods;
+using DungeonCrawl.Core;
+
 
 namespace DungeonCrawl.Actors.Characters
 {
@@ -12,6 +14,8 @@ namespace DungeonCrawl.Actors.Characters
 
         protected override void OnUpdate(float deltaTime)
         {
+
+
             if (Input.GetKeyDown(KeyCode.W))
             {
                 // Move up
@@ -35,6 +39,7 @@ namespace DungeonCrawl.Actors.Characters
                 // Move right
                 TryMove(Direction.Right);
             }
+            CameraController.Singleton.Position = (Position.x,Position.y) ;
         }
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)

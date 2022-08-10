@@ -19,6 +19,7 @@ namespace DungeonCrawl.Core
         {
             var lines = Regex.Split(Resources.Load<TextAsset>($"map_{id}").text, "\r\n|\r|\n");
 
+
             // Read map size from the first line
             var split = lines[0].Split(' ');
             var width = int.Parse(split[0]);
@@ -37,7 +38,7 @@ namespace DungeonCrawl.Core
             }
 
             // Set default camera size and position
-            CameraController.Singleton.Size = 10;
+            CameraController.Singleton.Size = 4;
             CameraController.Singleton.Position = (width / 2, -height / 2);
         }
 

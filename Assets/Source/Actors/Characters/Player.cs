@@ -61,10 +61,6 @@ namespace DungeonCrawl.Actors.Characters
             {
                 anotherActor.AttackFromPlayer(this);
             }
-            if (anotherActor.GetType() == typeof(Item))
-            {
-                return false;
-            }
             
             if (targetPosition == anotherActor.Position)
             {
@@ -72,8 +68,6 @@ namespace DungeonCrawl.Actors.Characters
             }
             return true;
         }
-
-        
 
         protected override void OnDeath()
         {

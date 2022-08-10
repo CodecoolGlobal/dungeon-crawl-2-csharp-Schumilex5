@@ -49,8 +49,9 @@ namespace DungeonCrawl.Actors.Characters
                 if (item != null)
                 {
                     ItemPickUp(item);
-                    Debug.Log($"Anyás {_inventory[0].DefaultName}");
+                    ActorManager.Singleton.DestroyActor(item);
                 }
+                Debug.Log($"Anyás {_inventory[0].DefaultName}");
             }
             CameraController.Singleton.Position = (Position.x,Position.y) ;
         }

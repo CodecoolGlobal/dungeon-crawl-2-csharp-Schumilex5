@@ -51,7 +51,6 @@ namespace DungeonCrawl.Actors
             {
                 if (OnCollision(actorAtTargetPosition, targetPosition))
                 {
-                    Debug.Log("bye");
                     // Allowed to move
                     Position = targetPosition;
                 }

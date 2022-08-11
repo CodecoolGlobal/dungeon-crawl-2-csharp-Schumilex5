@@ -1,7 +1,11 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
 using UnityEngine;
 using Assets.Source.Actors.ExtensionMethods;
+using Assets.Source.Core;
 using DungeonCrawl.Actors.Items;
+using DungeonCrawl.Actors.Static;
 using DungeonCrawl.Core;
 
 
@@ -49,10 +53,22 @@ namespace DungeonCrawl.Actors.Characters
                 if (item != null)
                 {
                     ItemPickUp(item);
-                    Debug.Log($"Anyás {_inventory[0].DefaultName}");
+                    Debug.Log($"{item.GetDurability()} and {item.GetBonusDmg()}");
+                    ActorManager.Singleton.DestroyActor(item);
+                }
+                else
+                {
+                    UserInterface.Singleton.SetText("Nem vót itt item", UserInterface.TextPosition.TopLeft);
                 }
             }
-            CameraController.Singleton.Position = (Position.x,Position.y) ;
+            
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                // Move right
+                ShowInventory(_inventory);
+            }
+            
+            CameraController.Singleton.Position = (Position.x,Position.y);
         }
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
@@ -61,11 +77,12 @@ namespace DungeonCrawl.Actors.Characters
             {
                 anotherActor.AttackFromPlayer(this);
             }
-            if (anotherActor.GetType() == typeof(Item))
+            if (anotherActor.GetType() == typeof(Door) && _inventory.Any(x => x is Key))
             {
-                return false;
+                Door door = ActorManager.Singleton.GetActorAt<Door>(targetPosition);
+                ActorManager.Singleton.DestroyActor(door);
             }
-            
+
             if (targetPosition == anotherActor.Position)
             {
                 return false;
@@ -73,20 +90,49 @@ namespace DungeonCrawl.Actors.Characters
             return true;
         }
 
-        
-
         protected override void OnDeath()
         {
             Debug.Log("Oh no, I'm dead!");
         }
 
-        public void ItemPickUp(Item item)
+        private void ItemPickUp(Item newItem)
         {
-            if (Position == item.Position)
+            if (Position == newItem.Position)
             {
-                _inventory.Add(item);
+                if (_inventory.Count > 0)
+                {
+                    foreach (Item item in _inventory)
+                    {
+                        if (item.DefaultName == newItem.DefaultName)
+                        {
+                            item.ChangeDurability(newItem.GetDurability());
+                            Debug.Log($"{newItem.DefaultName} gained durability");
+                            Debug.Log($"{newItem.DefaultName} durability: {newItem.GetDurability()}");
+                        }
+                    }
+                }
+                else
+                {
+                    _inventory.Add(newItem);
+                    Debug.Log($"{newItem.DefaultName} added to inventory");
+                }
             }
         }
+        
+
+        private void ShowInventory(List<Item> inventory)
+        {
+            string items = "";
+            foreach (var item in inventory)
+            {
+                    items += $"{item.DefaultName}: {item.GetDurability()}\n";
+                    Debug.Log($"{item.DefaultName}: {item.GetDurability()}\n");
+            }
+            
+            UserInterface.Singleton.SetText(items, UserInterface.TextPosition.BottomLeft);
+            Debug.Log("Inventory shown");
+        }
+        
 
         public override int DefaultSpriteId => 24;
         public override string DefaultName => "Player";

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 using Assets.Source.Actors.ExtensionMethods;
 using DungeonCrawl.Actors.Items;
@@ -13,7 +14,17 @@ namespace DungeonCrawl.Actors.Characters
         public float timeBtwAttack { get; set; }
         public static readonly float startTimeBtwAttack = 1f;
         public static readonly int damage = 5;
+        public static int Score { get; private set; }
         private List<Item> _inventory = new List<Item>();
+
+        public static void SetScore(int points)
+        {
+            if(points> 0) Score += points;
+            else
+            {
+                throw new OverflowException($"You can't take away points! Points: {points}");
+            }
+        }
 
         protected override void OnUpdate(float deltaTime)
         {

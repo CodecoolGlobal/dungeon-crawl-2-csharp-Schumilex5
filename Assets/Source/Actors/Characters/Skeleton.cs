@@ -7,7 +7,7 @@ namespace DungeonCrawl.Actors.Characters
     {
         public static readonly int damage = 2;
         public new int Health { get; private set; } = 2;
-        private readonly int moveTime = 500;
+        private readonly int moveTimeStep = 200;
         private int moveTimer = 0;
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
@@ -16,6 +16,7 @@ namespace DungeonCrawl.Actors.Characters
             {
                 return false;
             }
+            ResetMoveTimer();
             return true;
         }
 
@@ -23,37 +24,40 @@ namespace DungeonCrawl.Actors.Characters
         {
             Player player = GameObject.FindObjectOfType<Player>();
 
-            Debug.Log($"player pos: {player.Position}");
-            Debug.Log($"selton pos: {Position}");
-            if (player.Position.x >= Position.x && moveTimer >= moveTime)
+            if (moveTimer >= moveTimeStep)
             {
-                TryMove(Direction.Down);
-                moveTimer = 0;
+                if (player.Position.x > Position.x )
+                {
+                    TryMove(Direction.Right);
+                }
+                else
+                {
+                    TryMove(Direction.Left);
+                }
+
+                if (player.Position.y < Position.y)
+                {
+                    TryMove(Direction.Down);
+                }
+                else
+                {
+                    TryMove(Direction.Up);
+                }
             }
 
-            if (player.Position.x <= Position.x && moveTimer >= moveTime)
+            ResetMoveTimer();
+        }
+
+        private void ResetMoveTimer()
+        {
+            if (moveTimer >= moveTimeStep)
             {
-                TryMove(Direction.Up);
-                moveTimer = 0;
+                moveTimer=0;
             }
-
-            if (player.Position.y >= Position.y && moveTimer >= moveTime)
+            else
             {
-                TryMove(Direction.Right);
-                moveTimer = 0;
+                moveTimer++;
             }
-
-            if (player.Position.y >= Position.y && moveTimer >= moveTime)
-            {
-                TryMove(Direction.Left);
-                moveTimer = 0;
-            }
-
-
-
-            moveTimer++;
-
-
         }
 
         protected override void OnDeath()

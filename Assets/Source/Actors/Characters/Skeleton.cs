@@ -8,7 +8,7 @@ namespace DungeonCrawl.Actors.Characters
         public static readonly int damage = 2;
         public new int Health { get; private set; } = 2;
         private readonly int moveTimeStep = 200;
-        private int moveTimer = 0;
+        private int moveTimer = -2000;
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {

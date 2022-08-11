@@ -14,6 +14,7 @@ namespace DungeonCrawl.Actors.Characters
 
         protected override void OnDeath()
         {
+            Player.SetScore(100);
             Debug.Log("Well, I was already dead anyway...");
         }
 

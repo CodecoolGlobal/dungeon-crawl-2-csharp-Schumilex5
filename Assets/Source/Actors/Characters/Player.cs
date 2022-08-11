@@ -77,12 +77,16 @@ namespace DungeonCrawl.Actors.Characters
             {
                 anotherActor.AttackFromPlayer(this);
             }
+<<<<<<< HEAD
             if (anotherActor.GetType() == typeof(Door) && _inventory.Any(x => x is Key))
             {
                 Door door = ActorManager.Singleton.GetActorAt<Door>(targetPosition);
                 ActorManager.Singleton.DestroyActor(door);
             }
 
+=======
+            
+>>>>>>> c169d2d4f957a0814de96057c268455e0e7f9ee4
             if (targetPosition == anotherActor.Position)
             {
                 return false;

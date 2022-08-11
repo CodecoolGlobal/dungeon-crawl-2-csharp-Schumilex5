@@ -17,7 +17,17 @@ namespace DungeonCrawl.Actors.Characters
         public float timeBtwAttack { get; set; }
         public static readonly float startTimeBtwAttack = 1f;
         public static readonly int damage = 5;
+        public static int Score { get; private set; }
         private List<Item> _inventory = new List<Item>();
+
+        public static void SetScore(int points)
+        {
+            if(points> 0) Score += points;
+            else
+            {
+                throw new OverflowException($"You can't take away points! Points: {points}");
+            }
+        }
 
         protected override void OnUpdate(float deltaTime)
         {
@@ -77,16 +87,11 @@ namespace DungeonCrawl.Actors.Characters
             {
                 anotherActor.AttackFromPlayer(this);
             }
-<<<<<<< HEAD
             if (anotherActor.GetType() == typeof(Door) && _inventory.Any(x => x is Key))
             {
                 Door door = ActorManager.Singleton.GetActorAt<Door>(targetPosition);
                 ActorManager.Singleton.DestroyActor(door);
             }
-
-=======
-            
->>>>>>> c169d2d4f957a0814de96057c268455e0e7f9ee4
             if (targetPosition == anotherActor.Position)
             {
                 return false;

@@ -1,11 +1,18 @@
-﻿using UnityEngine;
+﻿using DungeonCrawl.Core;
+using UnityEngine;
 
 namespace DungeonCrawl.Actors.Characters
 {
     public class Skeleton : Character
     {
-        public static readonly int damage = 2;
-        public new int Health { get; private set; } = 2;
+        private int damage;
+        public new int Health { get; }
+
+        public Skeleton()
+        {
+            damage = 2;
+            this.Health = 10;
+        }
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {
@@ -14,8 +21,19 @@ namespace DungeonCrawl.Actors.Characters
 
         protected override void OnDeath()
         {
-            Player.SetScore(100);
+            Player player = FindObjectOfType<Player>();
+            player.SetScore(100);
             Debug.Log("Well, I was already dead anyway...");
+        }
+
+        public int GetDamage()
+        {
+            return damage;
+        }
+        
+        public int GetHealth()
+        {
+            return this.Health;
         }
 
         public override int DefaultSpriteId => 316;

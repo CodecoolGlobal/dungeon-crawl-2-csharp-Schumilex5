@@ -5,7 +5,7 @@
         public override int DefaultSpriteId => 415;
         public override string DefaultName => "Sword";
 
-        public Sword() : base(5, 3)
+        public Sword() : base(6, 5, -2)
         {
             
         }

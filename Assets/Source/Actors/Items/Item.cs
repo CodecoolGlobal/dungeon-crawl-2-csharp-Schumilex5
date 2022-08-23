@@ -8,12 +8,13 @@ namespace DungeonCrawl.Actors.Items
         private int _durability;
         private int _bonusDamage;
         private int _useCost = -1;
-
+        private int _bonusHealt;
         public Item(int durability, int bonusDamage)
         {
             _durability = durability;
             _bonusDamage = bonusDamage;
         }
+        
         
         public Item(int durability, int bonusDamage, int useCost)
         {
@@ -30,13 +31,12 @@ namespace DungeonCrawl.Actors.Items
         {
             return _bonusDamage;
         }
-
-        public void ChangeDurability(List<Item> inventory)
-        {
-            _durability -= _useCost;
-            ManageInventory(inventory);
-        }
         
+        public int Healing()
+        {
+            return _bonusHealt;
+        }
+
         public void ChangeDurability(List<Item> inventory, int value)
         {
             _durability += value;

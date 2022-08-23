@@ -19,7 +19,7 @@ namespace DungeonCrawl.Actors.Characters
         private List<Item> _inventory;
         private int _damage;
         private int _killedWizard;
-        private readonly int _stepTimer = 150;
+        private readonly int _stepTimer = 20;
         private int _stepCount = 0;
         private static readonly Dictionary<string, int> playerSpriteIDs = new Dictionary<string, int>
         {
@@ -63,6 +63,7 @@ namespace DungeonCrawl.Actors.Characters
             }
             else
             {
+                UserInterface.Singleton.SetText($"Health: 0\nDamage: {_damage}", UserInterface.TextPosition.TopLeft);
                 UserInterface.Singleton.SetText("Oh no I'm dead".ToUpper(), UserInterface.TextPosition.TopCenter);
                 
             }

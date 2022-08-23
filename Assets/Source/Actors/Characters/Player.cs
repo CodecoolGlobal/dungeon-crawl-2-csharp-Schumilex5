@@ -6,8 +6,8 @@ using Assets.Source.Core;
 using DungeonCrawl.Actors.Items;
 using DungeonCrawl.Actors.Static;
 using DungeonCrawl.Core;
-using System;
 using System.Linq;
+using UnityEngine.UIElements;
 
 namespace DungeonCrawl.Actors.Characters
 {
@@ -21,10 +21,14 @@ namespace DungeonCrawl.Actors.Characters
         private int _killedWizard;
         private readonly int _stepTimer = 100;
         private int _stepCount = 0;
+        private static readonly Dictionary<string, int> playerSpriteIDs = new Dictionary<string, int>
+        {
+            { "Default", 24 }, { "WithSowrd", 26 }
+        };
 
-
+        public override int DefaultSpriteId => 24;
+        public override string DefaultName => "Player";
         public int Score { get; private set; }
-
 
         public Player()
         {
@@ -37,7 +41,6 @@ namespace DungeonCrawl.Actors.Characters
             _killedWizard = 0;
             ShowStats();
         }
-
 
         public void SetScore(int points)
         {
@@ -69,7 +72,6 @@ namespace DungeonCrawl.Actors.Characters
         {
             UserInterface.Singleton.SetText($"Score: {GetScore()}", UserInterface.TextPosition.MiddleLeft);
         }
-        
 
         private void IsItemHere()
         {
@@ -80,7 +82,6 @@ namespace DungeonCrawl.Actors.Characters
                 StartCoroutine(DisplayMessage(pickUpMsg, 2, UserInterface.TextPosition.BottomLeft));
             }
         }
-        
         
         IEnumerator DisplayMessage(string message, int timeToDisplay, UserInterface.TextPosition textPlace)
         {
@@ -127,6 +128,7 @@ namespace DungeonCrawl.Actors.Characters
                 _bonusDamage = 0;
             }
         }
+
         private int CalculateDamage()
         {
             _damage = _baseDamage + _bonusDamage;
@@ -135,7 +137,6 @@ namespace DungeonCrawl.Actors.Characters
 
         protected override void OnUpdate(float deltaTime)
         {
-
             if (_stepCount >= _stepTimer)
             {
                 if (Input.GetKey(KeyCode.W))
@@ -171,7 +172,6 @@ namespace DungeonCrawl.Actors.Characters
             {
                 _stepCount++;
             }
-
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -209,7 +209,6 @@ namespace DungeonCrawl.Actors.Characters
             CameraController.Singleton.Position = (Position.x,Position.y);
         }
 
-
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {
             var thingIFace = anotherActor.GetType();
@@ -230,6 +229,15 @@ namespace DungeonCrawl.Actors.Characters
                     ShowStats();
                 }
 
+            }
+
+            if(thingIFace == typeof(Crawler))
+            {
+                SetBonusDamage();
+                Actor enemy = ActorManager.Singleton.GetActorAt(targetPosition);
+                Crawler crawlerEnemey = (Crawler)enemy;
+                crawlerEnemey.ApplyDamage(_damage);
+                ApplyDamage(Crawler.damage);
             }
             
             if (thingIFace == typeof(Wizard))
@@ -286,10 +294,11 @@ namespace DungeonCrawl.Actors.Characters
             Debug.Log("Oh no, I'm dead!");
         }
 
-
         private void ItemPickUp(Item newItem)
         {
             List<Item> inventory = _inventory;
+            if (newItem.GetType() == typeof(Sword)) SetSprite(playerSpriteIDs["WithSowrd"]);
+
             
             bool itemExist = false;
             foreach (var item in inventory)
@@ -401,8 +410,7 @@ namespace DungeonCrawl.Actors.Characters
 
         
 
-        public override int DefaultSpriteId => 24;
-        public override string DefaultName => "Player";
+        
     }
     
 }

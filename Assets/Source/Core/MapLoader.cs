@@ -86,6 +86,10 @@ namespace DungeonCrawl.Core
                     ActorManager.Singleton.Spawn<Floor>(position);
                     ActorManager.Singleton.Spawn<Potion>(position);
                     break;
+                case 'x': //Crawler
+                    ActorManager.Singleton.Spawn<Crawler>(position);
+                    ActorManager.Singleton.Spawn<Floor>(position);
+                    break;
                 case ' ':
                     break;
                 default:

@@ -91,12 +91,14 @@ namespace DungeonCrawl.Actors
         /// <summary>
         ///     Id of the default sprite of this actor type
         /// </summary>
-        public virtual int DefaultSpriteId { get; }
+        public abstract int DefaultSpriteId { get; }
 
 
         /// <summary>
         ///     Default name assigned to this actor type
         /// </summary>
         public abstract string DefaultName { get; }
+
+
     }
 }

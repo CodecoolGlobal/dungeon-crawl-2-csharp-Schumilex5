@@ -9,6 +9,8 @@ namespace DungeonCrawl.Actors.Characters
     {
         private int damage;
         public new int Health { get; }
+        public override int DefaultSpriteId => 316;
+        public override string DefaultName => "Skeleton";
 
         public Skeleton()
         {
@@ -52,7 +54,5 @@ namespace DungeonCrawl.Actors.Characters
             return this.Health;
         }
 
-        public override int DefaultSpriteId => 316;
-        public override string DefaultName => "Skeleton";
     }
 }

@@ -1,13 +1,12 @@
 using DungeonCrawl.Core;
 using UnityEngine;
 using System;
+using Assets.Source.ExtensionMethods;
 
 namespace DungeonCrawl.Actors.Characters
 {
     public class Skeleton : Character
     {
-        private readonly int moveTimeStep = 200;
-        private int moveTimer = -2000;
         private int damage;
         public new int Health { get; }
 
@@ -21,51 +20,20 @@ namespace DungeonCrawl.Actors.Characters
         {
             if (anotherActor.Position == targetPosition)
             {
+                if(anotherActor.GetType() == typeof(Player))
+                {
+                    ((Player)anotherActor).AttackSkeleton(this);
+                }
                 return false;
             }
-            ResetMoveTimer();
             return true;
         }
 
         protected override void OnUpdate(float deltaTime)
         {
-            Player player = GameObject.FindObjectOfType<Player>();
-
-            if (moveTimer >= moveTimeStep)
-            {
-                if (player.Position.x > Position.x )
-                {
-                    TryMove(Direction.Right);
-                }
-                else
-                {
-                    TryMove(Direction.Left);
-                }
-
-                if (player.Position.y < Position.y)
-                {
-                    TryMove(Direction.Down);
-                }
-                else
-                {
-                    TryMove(Direction.Up);
-                }
-            }
-
-            ResetMoveTimer();
+            this.HomingOnPlayer();
         }
 
-        private void ResetMoveTimer()
-        {
-            if (moveTimer >= moveTimeStep)
-            {
-                moveTimer=0;
-            }
-            else
-            {
-                moveTimer++;
-            }
-        }
 
         protected override void OnDeath()
         {

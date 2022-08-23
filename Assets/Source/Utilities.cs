@@ -29,4 +29,14 @@ namespace DungeonCrawl
             }
         }
     }
+
+    public class GetRandomNumbers
+    {
+        private static readonly Random random = new Random();
+        
+        public static int GetRandomNumberBetweenTwoValues(int from, int to)
+        {
+            return random.Next(from, to);
+        }
+    }
 }

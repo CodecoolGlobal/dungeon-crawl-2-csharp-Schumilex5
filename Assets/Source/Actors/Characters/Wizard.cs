@@ -1,5 +1,5 @@
 ﻿using UnityEngine;
-
+using Assets.Source.ExtensionMethods;
 
 namespace DungeonCrawl.Actors.Characters
 {
@@ -16,7 +16,16 @@ namespace DungeonCrawl.Actors.Characters
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {
-            return true;
+            if (anotherActor.GetType() == typeof(Player))
+            {
+                ((Player)anotherActor).AttackSkeleton(this);
+            }
+            return false;
+        }
+
+        protected override void OnUpdate(float deltaTime)
+        {
+            this.MoveInRandomDirection();
         }
 
         protected override void OnDeath()

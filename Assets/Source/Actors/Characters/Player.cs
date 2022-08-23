@@ -7,6 +7,7 @@ using DungeonCrawl.Actors.Items;
 using DungeonCrawl.Actors.Static;
 using DungeonCrawl.Core;
 using System.Linq;
+using Assets.Source.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace DungeonCrawl.Actors.Characters
@@ -21,6 +22,7 @@ namespace DungeonCrawl.Actors.Characters
         private int _killedWizard;
         private readonly int _stepTimer = 20;
         private int _stepCount = 0;
+        private int _level = 1;
         private static readonly Dictionary<string, int> playerSpriteIDs = new Dictionary<string, int>
         {
             { "Default", 24 }, { "WithSowrd", 26 }
@@ -42,6 +44,16 @@ namespace DungeonCrawl.Actors.Characters
             ShowStats();
         }
 
+        public void SaveState()
+        {
+            SaveSystem.SavePlayerData(this);
+        }
+
+        public void LoadState()
+        {
+            SaveSystem.LoadPlayerData();
+        }
+
         public void SetScore(int points)
         {
             if (points > 0)
@@ -55,6 +67,11 @@ namespace DungeonCrawl.Actors.Characters
             }
         }
 
+        private void ShowScore()
+        {
+            UserInterface.Singleton.SetText($"Score: {GetScore()}", UserInterface.TextPosition.MiddleLeft);
+        }
+        
         public void ShowStats()
         {
             if (Health > 0)
@@ -69,11 +86,11 @@ namespace DungeonCrawl.Actors.Characters
             }
         }
 
-        private void ShowScore()
+        public int GetLevel()
         {
-            UserInterface.Singleton.SetText($"Score: {GetScore()}", UserInterface.TextPosition.MiddleLeft);
+            return _level;
         }
-
+        
         private void IsItemHere()
         {
             if (ActorManager.Singleton.GetActorAt<Item>(Position))
@@ -206,6 +223,37 @@ namespace DungeonCrawl.Actors.Characters
                     }
                 }
             }
+
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                string areYouSure = "Do you want to save game?";
+                UserInterface.Singleton.SetText(areYouSure, UserInterface.TextPosition.MiddleCenter);
+                if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    SaveState();
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                    
+                }
+                else
+                {
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                }
+            }
+            
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                string areYouSure = "Do you want to load game?";
+                UserInterface.Singleton.SetText(areYouSure, UserInterface.TextPosition.MiddleCenter);
+                if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    LoadState();
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                }
+                else
+                {
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                }
+            }
             
             CameraController.Singleton.Position = (Position.x,Position.y);
         }
@@ -315,6 +363,7 @@ namespace DungeonCrawl.Actors.Characters
             {
                 int next = _killedWizard - 1;
                 NextLevel(next);
+                _level += 1;
             }
             if (itemExist)
             {
@@ -350,12 +399,12 @@ namespace DungeonCrawl.Actors.Characters
             return items;
         }
 
-        private int GetHealth()
+        public int GetHealth()
         {
             return Health;
         }
 
-        private int GetScore()
+        public int GetScore()
         {
             return Score;
         }
@@ -406,7 +455,8 @@ namespace DungeonCrawl.Actors.Characters
         private void NextLevel(int next)
         {
             ActorManager.Singleton.DestroyAllActors();
-            MapLoader.LoadMap(next);
+            MapLoader.LoadMap(_level + 1);
+            _level += 1;
         }
 
         

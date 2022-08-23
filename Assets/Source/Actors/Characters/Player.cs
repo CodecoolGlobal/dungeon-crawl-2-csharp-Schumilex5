@@ -7,18 +7,20 @@ using DungeonCrawl.Actors.Items;
 using DungeonCrawl.Actors.Static;
 using DungeonCrawl.Core;
 using System;
+using System.Linq;
 
 namespace DungeonCrawl.Actors.Characters
 {
     public class Player : Character
     {
 
-        private float _startTimeBtwAttack;
         private int _baseDamage;
         private int _bonusDamage;
         private List<Item> _inventory;
         private int _damage;
         private int _killedWizard;
+        private readonly int _stepTimer = 150;
+        private int _stepCount = 0;
 
 
         public int Score { get; private set; }
@@ -26,7 +28,6 @@ namespace DungeonCrawl.Actors.Characters
 
         public Player()
         {
-            _startTimeBtwAttack = 1f;
             _baseDamage = 5;
             _bonusDamage = 0;
             _damage = _baseDamage + _bonusDamage;
@@ -135,34 +136,42 @@ namespace DungeonCrawl.Actors.Characters
         protected override void OnUpdate(float deltaTime)
         {
 
-
-            if (Input.GetKeyDown(KeyCode.W))
+            if (_stepCount >= _stepTimer)
             {
-                // Move up
-                TryMove(Direction.Up);
-                IsItemHere();
+                if (Input.GetKey(KeyCode.W))
+                {
+                    // Move up
+                    TryMove(Direction.Up);
+                    IsItemHere();
+                }
+
+                if (Input.GetKey(KeyCode.S))
+                {
+                    // Move down
+                    TryMove(Direction.Down);
+                    IsItemHere();
+                }
+
+                if (Input.GetKey(KeyCode.A))
+                {
+                    // Move left
+                    TryMove(Direction.Left);
+                    IsItemHere();
+                }
+
+                if (Input.GetKey(KeyCode.D))
+                {
+                    // Move right
+                    TryMove(Direction.Right);
+                    IsItemHere();
+                }
+                _stepCount = 0;
+            }
+            else
+            {
+                _stepCount++;
             }
 
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                // Move down
-                TryMove(Direction.Down);
-                IsItemHere();
-            }
-
-            if (Input.GetKeyDown(KeyCode.A))
-            {
-                // Move left
-                TryMove(Direction.Left);
-                IsItemHere();
-            }
-
-            if (Input.GetKeyDown(KeyCode.D))
-            {
-                // Move right
-                TryMove(Direction.Right);
-                IsItemHere();
-            }
 
             if (Input.GetKeyDown(KeyCode.E))
             {
@@ -188,6 +197,7 @@ namespace DungeonCrawl.Actors.Characters
             
             CameraController.Singleton.Position = (Position.x,Position.y);
         }
+
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {
@@ -338,7 +348,7 @@ namespace DungeonCrawl.Actors.Characters
         }
 
 
-        private void AttackSkeleton(Actor enemy)
+        public void AttackSkeleton(Actor enemy)
         {
             ((Skeleton)enemy).ApplyDamage(CalculateDamage());
             ApplyDamage(((Skeleton)enemy).GetDamage());
@@ -372,7 +382,7 @@ namespace DungeonCrawl.Actors.Characters
             MapLoader.LoadMap(next);
         }
 
-
+        
 
         public override int DefaultSpriteId => 24;
         public override string DefaultName => "Player";

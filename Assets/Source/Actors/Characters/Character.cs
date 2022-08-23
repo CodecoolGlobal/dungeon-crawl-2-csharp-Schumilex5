@@ -25,5 +25,11 @@ namespace DungeonCrawl.Actors.Characters
         ///     All characters are drawn "above" floor etc
         /// </summary>
         public override int Z => -1;
-    }
+    
+        public void Healing(int heal)
+        {
+            Health += heal;
+        }
+    }   
+
 }

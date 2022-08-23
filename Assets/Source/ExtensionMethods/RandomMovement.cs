@@ -27,31 +27,33 @@ namespace Assets.Source.ExtensionMethods
     public static class RandomMovementInsideMapBounds
     {
         // Movement parameters
-        private static readonly int _stepTimer = 700; // Speed of walking
+        private static readonly int _stepTimer = 500; // Speed of walking
         private static int _stepCount = 0; // Counts up to the stepTimer then gets reset to 0
 
         // Map boundaries for NPCs
-        // Top left
+        // Min range
         private static readonly int _boundariesStartX = 0;
-        private static readonly int _boundariesEndX = 0;
+        private static readonly int _boundariesEndX = 30;
 
-        //Bottom Left
-        private static readonly int _boundariesStartY = 30;
-        private static readonly int _boundariesEndY = 30;
+        //Max range
+        private static readonly int _boundariesStartY = 20;
+        private static readonly int _boundariesEndY = -20;
 
         public static void RandomMovementInsideMapBoundaries(this Actor actor)
         {
             if (_stepCount >= _stepTimer
-                && actor.Position.x >= _boundariesStartX
-                && actor.Position.x <= _boundariesEndX
-                && actor.Position.y >= _boundariesStartY
-                && actor.Position.y <= _boundariesEndY
+                && actor.Position.x > _boundariesStartX
+                && actor.Position.x < _boundariesEndX
+                && actor.Position.y < _boundariesStartY
+                && actor.Position.y > _boundariesEndY
                 )
             {
                 actor.TryMove(RandomDirection.GetRandomDirection());
                 _stepCount = 0;
             }
             else _stepCount++;
+
+            Debug.Log(actor.Position);
         }
     }
 

@@ -19,7 +19,7 @@ namespace DungeonCrawl.Actors.Characters
         private List<Item> _inventory;
         private int _damage;
         private int _killedWizard;
-        private readonly int _stepTimer = 150;
+        private readonly int _stepTimer = 100;
         private int _stepCount = 0;
         private static readonly Dictionary<string, int> playerSpriteIDs = new Dictionary<string, int>
         {
@@ -191,8 +191,19 @@ namespace DungeonCrawl.Actors.Characters
             
             if (Input.GetKeyDown(KeyCode.I))
             {
-                // Move right
                 StartCoroutine(DisplayMessage(GetInventory(_inventory), 1, UserInterface.TextPosition.MiddleRight));
+            }
+            
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                for (int i = 0; i< _inventory.Count;i++)
+                {
+                    if (_inventory[i].DefaultName == GetItemFromInventory("Potion").DefaultName)
+                    {
+                        _inventory[i].ChangeDurability(_inventory, -1);
+                        Health += 5;
+                    }
+                }
             }
             
             CameraController.Singleton.Position = (Position.x,Position.y);
@@ -288,34 +299,39 @@ namespace DungeonCrawl.Actors.Characters
             List<Item> inventory = _inventory;
             if (newItem.GetType() == typeof(Sword)) SetSprite(playerSpriteIDs["WithSowrd"]);
 
+            
+            bool itemExist = false;
+            foreach (var item in inventory)
+            {
+                if (item.DefaultName == newItem.DefaultName)
+                {
+                    itemExist = true;
+                    break;
+                }
+            }
+            
             if (newItem.GetType() == typeof(Crown) && AllWizardDead())
             {
                 int next = _killedWizard - 1;
                 NextLevel(next);
             }
-            if (_inventory.Count > 0)
+            if (itemExist)
             {
                 for (int i = 0; i < inventory.Count; i++)
                 {
+
                     if (inventory[i].DefaultName == newItem.DefaultName)
                     {
                         inventory[i].ChangeDurability(inventory, newItem.GetDurability());
                         Debug.Log($"{newItem.DefaultName} gained durability");
                     }
-                    else
-                    {
-                        _inventory.Add(newItem);
-                       
-                        Debug.Log($"{newItem.DefaultName} added to inventory");
-                        break;
-                    }
                 }
-            }
-            else
+            }else
             {
                 _inventory.Add(newItem);
-                Debug.Log($"{newItem.DefaultName} added to inventory cause inventory was empty");
+                Debug.Log($"{newItem.DefaultName} added to inventory");
             }
+
 
             newItem.SetSprite(1);
         }

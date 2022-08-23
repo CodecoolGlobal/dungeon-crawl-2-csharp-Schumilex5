@@ -78,8 +78,13 @@ namespace DungeonCrawl.Core
                     ActorManager.Singleton.Spawn<Floor>(position);
                     break;
                 case 'c': //Crown
-                    ActorManager.Singleton.Spawn<Crown>(position);
                     ActorManager.Singleton.Spawn<Floor>(position);
+                    ActorManager.Singleton.Spawn<Crown>(position);
+                    break;
+                
+                case 'h': //HelthPotion
+                    ActorManager.Singleton.Spawn<Floor>(position);
+                    ActorManager.Singleton.Spawn<Potion>(position);
                     break;
                 case ' ':
                     break;

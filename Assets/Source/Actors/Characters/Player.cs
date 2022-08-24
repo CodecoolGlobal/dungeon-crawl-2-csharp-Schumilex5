@@ -51,7 +51,8 @@ namespace DungeonCrawl.Actors.Characters
 
         public void LoadState()
         {
-            SaveSystem.LoadPlayerData();
+            PlayerData data = SaveSystem.ReadPlayerData();
+            Position = (data.position[0], data.position[1]);
         }
 
         public void SetScore(int points)

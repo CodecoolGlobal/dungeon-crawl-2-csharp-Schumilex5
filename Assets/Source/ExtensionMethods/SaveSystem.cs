@@ -22,7 +22,7 @@ namespace Assets.Source.ExtensionMethods
         }
 
 
-        public static PlayerData LoadPlayerData()
+        public static PlayerData ReadPlayerData()
         {
             string path = Application.persistentDataPath + "/player.txt";
 
@@ -32,7 +32,9 @@ namespace Assets.Source.ExtensionMethods
                 BinaryFormatter formatter = new BinaryFormatter();
                 FileStream stream = new FileStream(path, FileMode.Open);
                 
-                PlayerData data = formatter.Deserialize(stream) as PlayerData;
+                PlayerData data = (PlayerData) formatter.Deserialize(stream);
+                Debug.Log($"{data.position[0]}, {data.position[1]}");
+                Debug.Log($"{data.health}");
                 stream.Close();
 
                 return data;
@@ -41,7 +43,7 @@ namespace Assets.Source.ExtensionMethods
             else
             {
                 string sadText = "No save file found, sorry :(";
-                UserInterface.Singleton.SetText(sadText, UserInterface.TextPosition.MiddleCenter);
+                Debug.Log(sadText);
                 return null;
             }
         }

@@ -1,4 +1,5 @@
-﻿using DungeonCrawl.Actors.Characters;
+﻿using DungeonCrawl.Actors;
+using DungeonCrawl.Actors.Characters;
 
 namespace Assets.Source.ExtensionMethods
 {
@@ -8,7 +9,7 @@ namespace Assets.Source.ExtensionMethods
         public int health;
         public int level;
         public int score;
-        public float[] position;
+        public int[] position;
 
         public PlayerData(Player player)
         {
@@ -16,9 +17,10 @@ namespace Assets.Source.ExtensionMethods
             score = player.GetScore();
             level = player.GetLevel();
 
-            position = new float[2];
+            position = new int[2];
             position[0] = player.Position.x;
             position[1] = player.Position.y;
         }
+        
     }
 }

@@ -56,7 +56,7 @@ namespace DungeonCrawl.Actors.Items
                 if (item.GetDurability() < 1)
                 {
                     inventory.Remove(item);
-                    player.ShowStats();
+                    TextDisplay.ShowStats(player.Health, player.Damage);
                 }
             }
         }

@@ -7,6 +7,7 @@ using DungeonCrawl.Actors.Items;
 using DungeonCrawl.Actors.Static;
 using DungeonCrawl.Core;
 using System.Linq;
+using Assets.Source.ExtensionMethods;
 using UnityEngine.UIElements;
 
 namespace DungeonCrawl.Actors.Characters
@@ -21,6 +22,7 @@ namespace DungeonCrawl.Actors.Characters
         private int _killedWizard;
         private readonly int _stepTimer = 20;
         private int _stepCount = 0;
+        private int _level = 1;
         private static readonly Dictionary<string, int> playerSpriteIDs = new Dictionary<string, int>
         {
             { "Default", 24 }, { "WithSowrd", 26 }
@@ -207,6 +209,39 @@ namespace DungeonCrawl.Actors.Characters
                 }
             }
             
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                Debug.Log("Tried saving");
+                string areYouSure = "Do you want to save game?\n" +
+                                    "           Y/N           ";
+                UserInterface.Singleton.SetText(areYouSure, UserInterface.TextPosition.MiddleCenter);
+                if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    SaveSystem.SaveGame();
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                }
+                else
+                {
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                }
+            }
+            
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                string areYouSure = "Do you want to load game?\n" +
+                                    "           Y/N           ";
+                UserInterface.Singleton.SetText(areYouSure, UserInterface.TextPosition.MiddleCenter);
+                if (Input.GetKeyDown(KeyCode.Y))
+                {
+                    SaveSystem.LoadGame();
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                }
+                else
+                {
+                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
+                }
+            }
+            
             CameraController.Singleton.Position = (Position.x,Position.y);
         }
 
@@ -243,7 +278,6 @@ namespace DungeonCrawl.Actors.Characters
             
             if (thingIFace == typeof(Wizard))
             {
-                Debug.Log("This is a wizard here");
                 SetBonusDamage();
                 Actor wizard = ActorManager.Singleton.GetActorAt(targetPosition);
                 Item swordItem = GetItemFromInventory("Sword");
@@ -313,8 +347,8 @@ namespace DungeonCrawl.Actors.Characters
             
             if (newItem.GetType() == typeof(Crown) && AllWizardDead())
             {
-                int next = _killedWizard - 1;
-                NextLevel(next);
+                // int next = _killedWizard - 1;
+                NextLevel();
             }
             if (itemExist)
             {
@@ -324,13 +358,11 @@ namespace DungeonCrawl.Actors.Characters
                     if (inventory[i].DefaultName == newItem.DefaultName)
                     {
                         inventory[i].ChangeDurability(inventory, newItem.GetDurability());
-                        Debug.Log($"{newItem.DefaultName} gained durability");
                     }
                 }
             }else
             {
                 _inventory.Add(newItem);
-                Debug.Log($"{newItem.DefaultName} added to inventory");
             }
 
 
@@ -344,7 +376,6 @@ namespace DungeonCrawl.Actors.Characters
             foreach (Item item in inventory)
             {
                     items += $"{item.DefaultName}: {item.GetDurability()}\n";
-                    Debug.Log($"{item.DefaultName}: {item.GetDurability()}\n");
             }
 
             return items;
@@ -403,15 +434,13 @@ namespace DungeonCrawl.Actors.Characters
             _killedWizard += 1;
         }
 
-        private void NextLevel(int next)
+        private void NextLevel()
         {
+            _level += 1;
             ActorManager.Singleton.DestroyAllActors();
-            MapLoader.LoadMap(next);
+            MapLoader.LoadMap(_level);
+            
         }
-
-        
-
-        
     }
     
 }

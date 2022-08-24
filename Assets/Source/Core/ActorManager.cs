@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using DungeonCrawl.Actors;
+using DungeonCrawl.Actors.Characters;
 using UnityEngine;
 using UnityEngine.U2D;
 
@@ -70,9 +71,19 @@ namespace DungeonCrawl.Core
         public void DestroyAllActors()
         {
             var actors = _allActors.ToArray();
+            Player player = FindObjectOfType<Player>();
 
             foreach (var actor in actors)
-                DestroyActor(actor);
+            {
+                if (actor.DefaultName != player.DefaultName)
+                {
+                    DestroyActor(actor);
+                }
+                else
+                {
+                    Debug.Log("This is a player. I like player. I refuse killing player");
+                }
+            }
         }
 
         /// <summary>
@@ -118,6 +129,11 @@ namespace DungeonCrawl.Core
             _allActors.Add(component);
 
             return component;
+        }
+
+        public HashSet<Actor> GetAllActor()
+        {
+            return _allActors;
         }
     }
 }

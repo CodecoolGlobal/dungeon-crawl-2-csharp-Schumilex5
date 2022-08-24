@@ -226,33 +226,14 @@ namespace DungeonCrawl.Actors.Characters
 
             if (Input.GetKeyDown(KeyCode.M))
             {
-                string areYouSure = "Do you want to save game?";
-                UserInterface.Singleton.SetText(areYouSure, UserInterface.TextPosition.MiddleCenter);
-                if (Input.GetKeyDown(KeyCode.Y))
-                {
-                    SaveState();
-                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
-                    
-                }
-                else
-                {
-                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
-                }
+                Debug.Log("Möntés");
+                
+                SaveState();
             }
             
             if (Input.GetKeyDown(KeyCode.L))
             {
-                string areYouSure = "Do you want to load game?";
-                UserInterface.Singleton.SetText(areYouSure, UserInterface.TextPosition.MiddleCenter);
-                if (Input.GetKeyDown(KeyCode.Y))
-                {
-                    LoadState();
-                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
-                }
-                else
-                {
-                    UserInterface.Singleton.SetText("", UserInterface.TextPosition.MiddleCenter);
-                }
+                LoadState();
             }
             
             CameraController.Singleton.Position = (Position.x,Position.y);

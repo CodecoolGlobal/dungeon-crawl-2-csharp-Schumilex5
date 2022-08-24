@@ -53,7 +53,7 @@ namespace Assets.Source.ExtensionMethods
             }
             else _stepCount++;
 
-            Debug.Log(actor.Position);
+            //Debug.Log(actor.Position);
         }
     }
 

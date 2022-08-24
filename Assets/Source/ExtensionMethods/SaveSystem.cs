@@ -11,7 +11,8 @@ namespace Assets.Source.ExtensionMethods
         public static void SavePlayerData(Player player)
         {
             BinaryFormatter formatter = new BinaryFormatter();
-            string path = Application.persistentDataPath + "/player.wtf";
+            string path = Application.persistentDataPath + "/player.txt";
+            Debug.Log(path);
             FileStream stream = new FileStream(path, FileMode.Create);
 
             PlayerData data = new PlayerData(player);
@@ -23,10 +24,11 @@ namespace Assets.Source.ExtensionMethods
 
         public static PlayerData LoadPlayerData()
         {
-            string path = Application.persistentDataPath + "/player.wtf";
+            string path = Application.persistentDataPath + "/player.txt";
 
             if (File.Exists(path))
             {
+                Debug.Log("Létezik");
                 BinaryFormatter formatter = new BinaryFormatter();
                 FileStream stream = new FileStream(path, FileMode.Open);
                 

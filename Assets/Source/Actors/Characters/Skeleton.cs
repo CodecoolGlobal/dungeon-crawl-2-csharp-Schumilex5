@@ -30,6 +30,8 @@ namespace DungeonCrawl.Actors.Characters
         protected override void OnUpdate(float deltaTime)
         {
             if(MovementCount >= MovementSpeed) this.HomingOnPlayer();
+            SoundManager.Play(Songs.Skeltons);
+            SoundManager.Playlist[Songs.Skeltons].loop = true;
         }
 
 

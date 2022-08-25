@@ -125,6 +125,7 @@ namespace DungeonCrawl.Actors.Characters
                     {
                         _inventory[i].ChangeDurability(_inventory, -1);
                         Health += 5;
+                        SoundManager.Play(Songs.Eat);
                     }
                 }
             }
@@ -140,6 +141,7 @@ namespace DungeonCrawl.Actors.Characters
                     ItemPickUp(item);
                     SetBonusDamage();
                     TextDisplay.ShowStats(Health, Damage);
+                    SoundManager.Play(Songs.Collect);
                 }
                 else
                 {
@@ -190,10 +192,15 @@ namespace DungeonCrawl.Actors.Characters
 
                 if (swordItem != null)
                 {
+                    SoundManager.Play(Songs.Slash);
                     this.ApplyDmgOnPlayerAndEnemy(enemyActor);
                     swordItem.ChangeDurability(_inventory, swordItem.GetUseCost());
                 }
-                else this.ApplyDmgOnSelf(enemyActor.Damage);
+                else
+                {
+                    this.ApplyDmgOnSelf(enemyActor.Damage);
+                    SoundManager.Play(Songs.Punch);
+                }
 
                 TextDisplay.ShowStats(Health, Damage);
             }
@@ -211,6 +218,7 @@ namespace DungeonCrawl.Actors.Characters
 
                 if (dur > 0)
                 {
+                    SoundManager.Play(Songs.Door);
                     Door door = ActorManager.Singleton.GetActorAt<Door>(targetPosition);
                     ActorManager.Singleton.DestroyActor(door);
                     keyItem.ChangeDurability(_inventory, keyItem.GetUseCost());

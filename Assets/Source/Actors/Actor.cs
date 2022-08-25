@@ -18,6 +18,7 @@ namespace DungeonCrawl.Actors
 
         private (int x, int y) _position;
         private SpriteRenderer _spriteRenderer;
+        
         public abstract float MovementSpeed { get; set; }
         public abstract float MovementCount { get; set; }
 

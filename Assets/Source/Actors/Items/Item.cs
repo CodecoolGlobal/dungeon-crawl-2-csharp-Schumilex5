@@ -52,8 +52,9 @@ namespace DungeonCrawl.Actors.Items
         private void ManageInventory(List<Item> inventory)
         {
             Player player = FindObjectOfType<Player>();
-            foreach (var item in inventory)
+            for (int i = 0; i <inventory.Count; i++)
             {
+                Item item = inventory[i];
                 if (item.GetDurability() < 1)
                 {
                     inventory.Remove(item);

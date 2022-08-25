@@ -13,6 +13,8 @@ namespace DungeonCrawl.Actors.Characters
 
         public override int DefaultSpriteId => 353;
         public override string DefaultName => "Crawler";
+        public override float MovementSpeed { get; set; } = 1.7f;
+        public override float MovementCount { get; set; } = 0;
 
         public Crawler()
         {
@@ -32,7 +34,7 @@ namespace DungeonCrawl.Actors.Characters
         protected override void OnUpdate(float deltaTime)
         {
             AnimateMovement();
-            this.RandomMovementInsideMapBoundaries();
+            if(MovementCount >= MovementSpeed) this.RandomMovementInsideMapBoundaries();
         }
 
         private void AnimateMovement()

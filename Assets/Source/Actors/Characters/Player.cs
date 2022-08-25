@@ -20,8 +20,6 @@ namespace DungeonCrawl.Actors.Characters
         private int _bonusDamage;
         private List<Item> _inventory;
         private int _killedWizard;
-        private readonly int _stepTimer = 100;
-        private int _stepCount = 0;
         private static readonly Dictionary<string, int> _playerSpriteIDs = new Dictionary<string, int>
         {
             { "Default", 24 }, { "WithSowrd", 26 }
@@ -30,6 +28,8 @@ namespace DungeonCrawl.Actors.Characters
         public override int DefaultSpriteId => 24;
         public override string DefaultName => "Player";
         public int Score { get; private set; }
+        public override float MovementSpeed { get; set; } = 0.1f;
+        public override float MovementCount { get; set; } = 0;
 
         public Player()
         {
@@ -94,40 +94,44 @@ namespace DungeonCrawl.Actors.Characters
 
         protected override void OnUpdate(float deltaTime)
         {
-            if (_stepCount >= _stepTimer)
-            {
-                if (Input.GetKey(KeyCode.W))
-                {
-                    // Move up
-                    TryMove(Direction.Up);
-                    IsItemHere();
-                }
+            if(MovementCount >= MovementSpeed) MoveMe();
 
-                if (Input.GetKey(KeyCode.S))
-                {
-                    // Move down
-                    TryMove(Direction.Down);
-                    IsItemHere();
-                }
+            PickUpItem();
 
-                if (Input.GetKey(KeyCode.A))
-                {
-                    // Move left
-                    TryMove(Direction.Left);
-                    IsItemHere();
-                }
+            ShowInventory();
 
-                if (Input.GetKey(KeyCode.D))
-                {
-                    // Move right
-                    TryMove(Direction.Right);
-                    IsItemHere();
-                }
-                _stepCount = 0;
-            }
-            else _stepCount++;
+            UsePotion();
             
+            CamFollowPlayer();
+        }
 
+        public void CamFollowPlayer() => CameraController.Singleton.Position = (Position.x, Position.y);
+
+        public void ShowInventory()
+        {
+            if (Input.GetKeyDown(KeyCode.I))
+            {
+                StartCoroutine(TextDisplay.DisplayMessage(_inventory.GetInventory(), 1, UserInterface.TextPosition.MiddleRight));
+            }
+        }
+
+        public void UsePotion()
+        {
+            if (Input.GetKeyDown(KeyCode.F))
+            {
+                for (int i = 0; i < _inventory.Count; i++)
+                {
+                    if (_inventory[i].DefaultName == _inventory.GetItemFromInventory("Potion").DefaultName)
+                    {
+                        _inventory[i].ChangeDurability(_inventory, -1);
+                        Health += 5;
+                    }
+                }
+            }
+        }
+
+        public void PickUpItem()
+        {
             if (Input.GetKeyDown(KeyCode.E))
             {
                 var item = ActorManager.Singleton.GetActorAt<Item>(Position);
@@ -142,24 +146,37 @@ namespace DungeonCrawl.Actors.Characters
                     StartCoroutine(TextDisplay.DisplayMessage("No item here", 1, UserInterface.TextPosition.TopRight));
                 }
             }
+        }
 
-            if (Input.GetKeyDown(KeyCode.I))
+        public void MoveMe()
+        {
+            if (Input.GetKey(KeyCode.W))
             {
-                StartCoroutine(TextDisplay.DisplayMessage(_inventory.GetInventory(), 1, UserInterface.TextPosition.MiddleRight));
+                // Move up
+                TryMove(Direction.Up);
+                IsItemHere();
             }
 
-            if (Input.GetKeyDown(KeyCode.F))
+            if (Input.GetKey(KeyCode.S))
             {
-                for (int i = 0; i < _inventory.Count; i++)
-                {
-                    if (_inventory[i].DefaultName == _inventory.GetItemFromInventory("Potion").DefaultName)
-                    {
-                        _inventory[i].ChangeDurability(_inventory, -1);
-                        Health += 5;
-                    }
-                }
+                // Move down
+                TryMove(Direction.Down);
+                IsItemHere();
             }
-            CameraController.Singleton.Position = (Position.x, Position.y);
+
+            if (Input.GetKey(KeyCode.A))
+            {
+                // Move left
+                TryMove(Direction.Left);
+                IsItemHere();
+            }
+
+            if (Input.GetKey(KeyCode.D))
+            {
+                // Move right
+                TryMove(Direction.Right);
+                IsItemHere();
+            }
         }
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
@@ -248,15 +265,9 @@ namespace DungeonCrawl.Actors.Characters
 
         public int GetScore() => Score;
 
-        public bool AllWizardDead()
-        {
-            return !FindObjectOfType<Wizard>() ? true : false;
-        }
+        public bool AllWizardDead() => !FindObjectOfType<Wizard>() ? true : false;
 
-        public void SetKilledWizardCount()
-        {
-            _killedWizard += 1;
-        }
+        public void SetKilledWizardCount() => _killedWizard++;
 
         public void KillPlayer()
         {

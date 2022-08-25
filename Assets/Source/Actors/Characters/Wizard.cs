@@ -18,7 +18,11 @@ namespace DungeonCrawl.Actors.Characters
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {
-            return false;
+            if (anotherActor.Position == targetPosition)
+            {
+                return false;
+            }
+            return true;
         }
 
         protected override void OnUpdate(float deltaTime)

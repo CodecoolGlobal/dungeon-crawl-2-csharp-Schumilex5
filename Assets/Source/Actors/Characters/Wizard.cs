@@ -7,6 +7,8 @@ namespace DungeonCrawl.Actors.Characters
     public class Wizard : Enemy
     {
         public new int Health { get; }
+        public override float MovementSpeed { get; set; } = 1.2f;
+        public override float MovementCount { get; set; } = 0;
 
         public Wizard()
         {
@@ -21,7 +23,7 @@ namespace DungeonCrawl.Actors.Characters
 
         protected override void OnUpdate(float deltaTime)
         {
-            this.MoveInRandomDirection();
+            if (MovementCount >= MovementSpeed) this.MoveInRandomDirection();
         }
 
         protected override void OnDeath()

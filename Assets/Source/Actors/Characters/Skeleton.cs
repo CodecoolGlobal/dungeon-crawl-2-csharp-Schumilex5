@@ -9,6 +9,8 @@ namespace DungeonCrawl.Actors.Characters
         public new int Health { get; }
         public override int DefaultSpriteId => 316;
         public override string DefaultName => "Skeleton";
+        public override float MovementSpeed { get; set; } = 1.5f;
+        public override float MovementCount { get; set; } = 0;
 
         public Skeleton()
         {
@@ -20,18 +22,14 @@ namespace DungeonCrawl.Actors.Characters
         {
             if (anotherActor.Position == targetPosition)
             {
-                if (anotherActor.GetType() == typeof(Player))
-                {
-                    //this.ApplyDmgOnPlayerAndEnemy((Player)anotherActor);
-                    return false;
-                }
+                return false;
             }
             return true;
         }
 
         protected override void OnUpdate(float deltaTime)
         {
-            this.HomingOnPlayer();
+            if(MovementCount >= MovementSpeed) this.HomingOnPlayer();
         }
 
 

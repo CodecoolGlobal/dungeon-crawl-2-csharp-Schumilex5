@@ -9,6 +9,7 @@ namespace DungeonCrawl.Actors.Items
         private int _bonusDamage;
         private int _useCost = -1;
         private int _bonusHealt;
+
         public Item(int durability, int bonusDamage)
         {
             _durability = durability;
@@ -51,12 +52,13 @@ namespace DungeonCrawl.Actors.Items
         private void ManageInventory(List<Item> inventory)
         {
             Player player = FindObjectOfType<Player>();
-            foreach (var item in inventory)
+            for (int i = 0; i <inventory.Count; i++)
             {
+                Item item = inventory[i];
                 if (item.GetDurability() < 1)
                 {
                     inventory.Remove(item);
-                    player.ShowStats();
+                    TextDisplay.ShowStats(player.Health, player.Damage);
                 }
             }
         }

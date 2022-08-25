@@ -1,31 +1,27 @@
-using DungeonCrawl.Core;
 using UnityEngine;
-using System;
+using Assets.Source.Actors;
 using Assets.Source.ExtensionMethods;
 
 namespace DungeonCrawl.Actors.Characters
 {
-    public class Skeleton : Character
+    public class Skeleton : Enemy
     {
-        private int damage;
         public new int Health { get; }
         public override int DefaultSpriteId => 316;
         public override string DefaultName => "Skeleton";
+        public override float MovementSpeed { get; set; } = 1.5f;
+        public override float MovementCount { get; set; } = 0;
 
         public Skeleton()
         {
-            damage = 2;
-            this.Health = 10;
+            Damage = 2;
+            Health = 10;
         }
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {
             if (anotherActor.Position == targetPosition)
             {
-                if(anotherActor.GetType() == typeof(Player))
-                {
-                    ((Player)anotherActor).AttackSkeleton(this);
-                }
                 return false;
             }
             return true;
@@ -33,7 +29,9 @@ namespace DungeonCrawl.Actors.Characters
 
         protected override void OnUpdate(float deltaTime)
         {
-            this.HomingOnPlayer();
+            if(MovementCount >= MovementSpeed) this.HomingOnPlayer();
+            SoundManager.Play(Songs.Skeltons);
+            SoundManager.Playlist[Songs.Skeltons].loop = true;
         }
 
 
@@ -42,16 +40,6 @@ namespace DungeonCrawl.Actors.Characters
             Player player = FindObjectOfType<Player>();
             player.SetScore(100);
             Debug.Log("Well, I was already dead anyway...");
-        }
-
-        public int GetDamage()
-        {
-            return damage;
-        }
-        
-        public int GetHealth()
-        {
-            return this.Health;
         }
 
     }

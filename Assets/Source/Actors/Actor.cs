@@ -18,6 +18,10 @@ namespace DungeonCrawl.Actors
 
         private (int x, int y) _position;
         private SpriteRenderer _spriteRenderer;
+        
+        public abstract float MovementSpeed { get; set; }
+        public abstract float MovementCount { get; set; }
+
 
         private void Awake()
         {
@@ -28,7 +32,10 @@ namespace DungeonCrawl.Actors
 
         private void Update()
         {
+            MovementCount += Time.deltaTime;
+            
             OnUpdate(Time.deltaTime);
+            if (MovementCount >= MovementSpeed) MovementCount = 0;
         }
 
         public void SetSprite(int id)

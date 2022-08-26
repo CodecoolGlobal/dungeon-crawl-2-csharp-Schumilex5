@@ -298,5 +298,20 @@ namespace DungeonCrawl.Actors.Characters
             OnDeath();
             ActorManager.Singleton.DestroyActor(this);
         } 
+        
+        private void SetPlayerStats(PlayerData data)
+        {
+            Position = (data.position[0], data.position[1]);
+            SetSprite(data.playerSpriteId);
+            Health = data.health;
+            Score = data.score;
+            _inventory = new List<Item>();
+            for (int itemIndex = 0; itemIndex < data.Items.Length; itemIndex++)
+            {
+                FillInventory(data.Items[itemIndex]);
+                Item currentItem = GetItemFromInventory(data.Items[itemIndex]);
+                currentItem.ChangeDurability(_inventory,data.Durabilities[itemIndex] - currentItem.GetDurability());
+            }
+        }
     }
 }

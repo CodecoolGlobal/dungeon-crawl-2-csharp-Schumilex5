@@ -297,7 +297,23 @@ namespace DungeonCrawl.Actors.Characters
         {
             OnDeath();
             ActorManager.Singleton.DestroyActor(this);
-        } 
+        }
+        
+        private void FillInventory(string itemName)
+        {
+            switch (itemName)
+            {
+                case "Sword":
+                    _inventory.Add(gameObject.AddComponent<Sword>());
+                    break;
+                case "Key":
+                    _inventory.Add(gameObject.AddComponent<Key>());
+                    break;
+                case "Potion":
+                    _inventory.Add(gameObject.AddComponent<Potion>());
+                    break;
+            }
+        }
         
         private void SetPlayerStats(PlayerData data)
         {

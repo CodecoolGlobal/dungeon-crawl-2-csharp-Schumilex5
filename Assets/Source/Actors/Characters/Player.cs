@@ -315,6 +315,19 @@ namespace DungeonCrawl.Actors.Characters
             }
         }
         
+        private Item GetItemFromInventory(string className)
+        {
+            for (int i = 0; i < _inventory.Count; i++)
+            {
+                if (_inventory[i].DefaultName == $"{className}")
+                {
+                    return _inventory[i];
+                }
+            }
+
+            return null;
+        }
+        
         private void SetPlayerStats(PlayerData data)
         {
             Position = (data.position[0], data.position[1]);

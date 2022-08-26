@@ -146,6 +146,22 @@ namespace DungeonCrawl.Actors.Characters
                 }
             }
         }
+        
+        public void SaveGame()
+        {
+            if (Input.GetKeyDown(KeyCode.M))
+            {
+                SaveState();
+            }
+        }
+        
+        public void LoadGame()
+        {
+            if (Input.GetKeyDown(KeyCode.L))
+            {
+                LoadState();
+            }
+        }
 
         public void PickUpItem()
         {
@@ -341,6 +357,21 @@ namespace DungeonCrawl.Actors.Characters
                 Item currentItem = GetItemFromInventory(data.Items[itemIndex]);
                 currentItem.ChangeDurability(_inventory,data.Durabilities[itemIndex] - currentItem.GetDurability());
             }
+        }
+        
+        public void LoadState()
+        {
+            PlayerData data = SaveSystem.ReadPlayerData();
+            SetLevel(data.level);
+            //MapLoader.LoadNewMap(_level);
+            SetPlayerStats(data);
+            //_inventory = new List<Item>(data.playerItems);
+            ShowStats();
+        }
+
+        public void SaveState()
+        {
+            SaveSystems.SavePlayerData();
         }
     }
 }

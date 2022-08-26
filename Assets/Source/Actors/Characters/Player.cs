@@ -126,6 +126,11 @@ namespace DungeonCrawl.Actors.Characters
             }
         }
 
+        public List<Item> GetInventory()
+        {
+            return _inventory;
+        }
+
         public void UsePotion()
         {
             if (Input.GetKeyDown(KeyCode.F))

@@ -28,7 +28,7 @@ namespace DungeonCrawl.Actors.Characters
         public override int DefaultSpriteId => 24;
         public override string DefaultName => "Player";
         public int Score { get; private set; }
-        public override float MovementSpeed { get; set; } = 0.5f;
+        public override float MovementSpeed { get; set; } = 0.1f;
         public override float MovementCount { get; set; } = 0;
 
         public Player()
@@ -43,16 +43,16 @@ namespace DungeonCrawl.Actors.Characters
             //ShowStats();
         }
 
-        public void SaveState()
-        {
-            SaveSystem.SavePlayerData(this);
-        }
-
-        public void LoadState()
-        {
-            PlayerData data = SaveSystem.ReadPlayerData();
-            Position = (data.position[0], data.position[1]);
-        }
+        // public void SaveState()
+        // {
+        //     SaveSystem.SavePlayerData(this);
+        // }
+        //
+        // public void LoadState()
+        // {
+        //     PlayerData data = SaveSystem.ReadPlayerData();
+        //     Position = (data.position[0], data.position[1]);
+        // }
 
         public void SetScore(int points)
         {
@@ -114,6 +114,10 @@ namespace DungeonCrawl.Actors.Characters
             UsePotion();
             
             CamFollowPlayer();
+            
+            SaveGame();
+            
+            LoadGame();
         }
 
         public void CamFollowPlayer() => CameraController.Singleton.Position = (Position.x, Position.y);
@@ -344,6 +348,20 @@ namespace DungeonCrawl.Actors.Characters
             return null;
         }
         
+        public void LoadState()
+        {
+            PlayerData data = SaveSystem.ReadPlayerData();
+            //MapLoader.LoadNewMap(_level);
+            SetPlayerStats(data);
+            //_inventory = new List<Item>(data.playerItems);
+        }
+
+        public void SaveState()
+        {
+            SaveSystem.SavePlayerData(this);
+        }
+        
+        
         private void SetPlayerStats(PlayerData data)
         {
             Position = (data.position[0], data.position[1]);
@@ -359,19 +377,5 @@ namespace DungeonCrawl.Actors.Characters
             }
         }
         
-        public void LoadState()
-        {
-            PlayerData data = SaveSystem.ReadPlayerData();
-            SetLevel(data.level);
-            //MapLoader.LoadNewMap(_level);
-            SetPlayerStats(data);
-            //_inventory = new List<Item>(data.playerItems);
-            ShowStats();
-        }
-
-        public void SaveState()
-        {
-            SaveSystems.SavePlayerData();
-        }
     }
 }

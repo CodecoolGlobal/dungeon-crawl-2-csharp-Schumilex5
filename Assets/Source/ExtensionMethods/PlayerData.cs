@@ -13,9 +13,8 @@ namespace Assets.Source.ExtensionMethods
 
         public PlayerData(Player player)
         {
-            health = player.GetHealth();
+            health = player.Health;
             score = player.GetScore();
-            level = player.GetLevel();
 
             position = new int[2];
             position[0] = player.Position.x;

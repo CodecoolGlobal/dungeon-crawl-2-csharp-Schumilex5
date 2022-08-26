@@ -345,7 +345,6 @@ namespace DungeonCrawl.Actors.Characters
             {
                 int next = _killedWizard - 1;
                 NextLevel(next);
-                _level += 1;
             }
             if (itemExist)
             {

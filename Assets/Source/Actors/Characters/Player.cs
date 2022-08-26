@@ -28,7 +28,7 @@ namespace DungeonCrawl.Actors.Characters
         public override int DefaultSpriteId => 24;
         public override string DefaultName => "Player";
         public int Score { get; private set; }
-        public override float MovementSpeed { get; set; } = 0.1f;
+        public override float MovementSpeed { get; set; } = 0.5f;
         public override float MovementCount { get; set; } = 0;
 
         public Player()

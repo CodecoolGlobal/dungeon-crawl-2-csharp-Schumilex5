@@ -1,23 +1,9 @@
-﻿using DungeonCrawl.Core;
-
-namespace DungeonCrawl.Actors.Characters
+﻿namespace DungeonCrawl.Actors.Characters
 {
     public abstract class Character : Actor
     {
         public int Health { get; set; }
-
-        public void ApplyDamage(int damage)
-        {
-            Health -= damage;
-
-            if (Health <= 0)
-            {
-                // Die
-                OnDeath();
-
-                ActorManager.Singleton.DestroyActor(this);
-            }
-        }
+        public int Damage { get; set; }
 
         protected abstract void OnDeath();
 
@@ -25,11 +11,7 @@ namespace DungeonCrawl.Actors.Characters
         ///     All characters are drawn "above" floor etc
         /// </summary>
         public override int Z => -1;
-    
-        public void Healing(int heal)
-        {
-            Health += heal;
-        }
-    }   
+
+    }
 
 }

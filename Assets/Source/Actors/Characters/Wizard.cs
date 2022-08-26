@@ -1,31 +1,33 @@
-﻿using UnityEngine;
+﻿using Assets.Source.Actors;
+using UnityEngine;
 using Assets.Source.ExtensionMethods;
 
 namespace DungeonCrawl.Actors.Characters
 {
-    public class Wizard : Character
+    public class Wizard : Enemy
     {
-        private int _damage;
         public new int Health { get; }
+        public override float MovementSpeed { get; set; } = 1.2f;
+        public override float MovementCount { get; set; } = 0;
 
         public Wizard()
         {
-            _damage = 5;
+            Damage = 5;
             Health = 50;
         }
 
         public override bool OnCollision(Actor anotherActor, (int, int) targetPosition)
         {
-            if (anotherActor.GetType() == typeof(Player))
+            if (anotherActor.Position == targetPosition)
             {
-                ((Player)anotherActor).AttackSkeleton(this);
+                return false;
             }
-            return false;
+            return true;
         }
 
         protected override void OnUpdate(float deltaTime)
         {
-            this.MoveInRandomDirection();
+            if (MovementCount >= MovementSpeed) this.MoveInRandomDirection();
         }
 
         protected override void OnDeath()
@@ -34,15 +36,6 @@ namespace DungeonCrawl.Actors.Characters
             player.SetScore(250);
             player.SetKilledWizardCount();
             Debug.Log("I will live forever in another dimension anyway..");
-        }
-
-        public int GetDamage()
-        {
-            return _damage;
-        }
-        public int GetHealth()
-        {
-            return Health;
         }
 
         public override int DefaultSpriteId => 71;
